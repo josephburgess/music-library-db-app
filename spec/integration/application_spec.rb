@@ -31,23 +31,22 @@ describe Application do
     end
   end
 
-  context 'GET to /artists' do
-    it 'returns the artist list' do
-      response = get('/artists')
-      expected_response = 'Pixies, ABBA, Taylor Swift, Nina Simone'
-      expect(response.status).to eq 200
-      expect(response.body).to eq expected_response
-    end
-  end
+  # context 'GET to /artists' do
+  #   it 'returns the artist list' do
+  #     response = get('/artists')
+  #     expected_response = 'Pixies, ABBA, Taylor Swift, Nina Simone'
+  #     expect(response.status).to eq 200
+  #     expect(response.body).to eq expected_response
+  #   end
+  # end
 
   context 'POST to /artists' do
     it 'adds artists to the list' do
       response = post('/artists', name: 'Wild Nothing', genre: 'Indie')
-      expected_response = 'Pixies, ABBA, Taylor Swift, Nina Simone, Wild Nothing'
       expect(response.status).to eq 200
       response = get('/artists')
       expect(response.status).to eq 200
-      expect(response.body).to eq expected_response
+      expect(response.body).to include 'Name: <a href = "/artists/5">Wild Nothing</a>'
     end
   end
 
@@ -67,6 +66,16 @@ describe Application do
       expect(response.status).to eq 200
       expect(response.body).to include '<h1>Pixies</h1>'
       expect(response.body).to include 'Genre: Rock'
+    end
+  end
+
+  context 'GET to /artists' do
+    it 'returns the details for all artists including links' do
+      response = get('/artists')
+      expect(response.status).to eq 200
+      expect(response.body).to include '<h1>Artists</h1>'
+      expect(response.body).to include 'Name: <a href = "/artists/1">Pixies</a>'
+      expect(response.body).to include 'Genre: Pop'
     end
   end
 end
