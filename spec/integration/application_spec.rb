@@ -14,9 +14,10 @@ describe Application do
     it 'returns a list of albums as HTML' do
       response = get('/albums')
       expect(response.status).to eq 200
-      expect(response.body).to include 'Title: Surfer Rosa'
+
+      expect(response.body).to include 'Title: <a href = "/albums/2">Surfer Rosa</a>'
       expect(response.body).to include 'Released: 1988'
-      expect(response.body).to include 'Title: Doolittle'
+      expect(response.body).to include 'Title: <a href = "/albums/1">Doolittle</a>'
     end
   end
 
@@ -57,6 +58,15 @@ describe Application do
       expect(response.body).to include '<h1>Doolittle</h1>'
       expect(response.body).to include 'Release year: 1989'
       expect(response.body).to include 'Artist: Pixies'
+    end
+  end
+
+  context 'GET to /artists/:id' do
+    it 'returns the details for the specified artist' do
+      response = get('/artists/1')
+      expect(response.status).to eq 200
+      expect(response.body).to include '<h1>Pixies</h1>'
+      expect(response.body).to include 'Genre: Rock'
     end
   end
 end
