@@ -21,12 +21,20 @@ class Application < Sinatra::Base
   end
 
   post '/albums' do
-    repo = AlbumRepository.new
-    album = Album.new
-    album.title = params[:title]
-    album.release_year = params[:release_year]
-    album.artist_id = params[:artist_id]
-    repo.create(album)
+    if invalid_parameters?
+      status 400
+      return 'Please include both title and release year.'
+    end
+    @album = Album.new
+    @album.title = params[:title]
+    @album.release_year = params[:release_year]
+    @album.artist_id = params[:artist_id]
+    AlbumRepository.new.create(@album)
+    erb(:album_created)
+  end
+
+  def invalid_parameters?
+    params[:title].nil? || params[:release_year].nil?
   end
 
   get '/albums/new' do

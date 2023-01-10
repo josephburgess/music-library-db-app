@@ -31,6 +31,19 @@ describe Application do
     end
   end
 
+  context 'POST to albums via form' do
+    it 'shows a success page when valid inputs are provided' do
+      response = post('/albums', title: 'Voyage', release_year: '2022')
+      expect(response.status).to eq 200
+      expect(response.body).to include('<h1>Your album has been added!</h1>')
+    end
+    it 'responds with 400 status if inputs are invalid' do
+      response = post('/albums', title: 'Voyage', release_year: nil)
+      expect(response.status).to eq 400
+      expect(response.body).to include('Please include both title and release year.')
+    end
+  end
+
   context 'POST to /artists' do
     it 'adds artists to the list' do
       response = post('/artists', name: 'Wild Nothing', genre: 'Indie')
