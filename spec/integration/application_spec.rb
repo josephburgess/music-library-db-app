@@ -65,6 +65,30 @@ describe Application do
     end
   end
 
+  context 'GET to /artists/new' do
+    it 'returns a form for adding new artists' do
+      response = get('/artists/new')
+      expect(response.status).to eq 200
+      expect(response.body).to include '<h1> Add an artist: </h1>'
+      expect(response.body).to include '<form action="/artists" method="POST">'
+      expect(response.body).to include '<input type="text" id="name" name="name"><br>'
+      expect(response.body).to include '<input type="text" id="genre" name="genre"><br><br>'
+    end
+  end
+
+  context 'POST to /artists via form' do
+    it 'shows success page when adding valid artists' do
+      response = post('/artists', name: 'Wild Nothing', genre: 'Indie')
+      expect(response.status).to eq 200
+      expect(response.body).to include('<h1>Your artist has been added!</h1>')
+    end
+    it 'returns status 400 when invalid inputs are provided' do
+      response = post('/artists', name: 'Wild Nothing', genre: nil)
+      expect(response.status).to eq 400
+      expect(response.body).to include('Please include both artist and genre.')
+    end
+  end
+
   context 'GET to /albums/:id' do
     it 'returns the appropriate album in HTML format' do
       response = get('/albums/1')

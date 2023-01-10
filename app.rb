@@ -21,7 +21,7 @@ class Application < Sinatra::Base
   end
 
   post '/albums' do
-    if invalid_parameters?
+    if invalid_album_parameters?
       status 400
       return 'Please include both title and release year.'
     end
@@ -33,12 +33,20 @@ class Application < Sinatra::Base
     erb(:album_created)
   end
 
-  def invalid_parameters?
+  def invalid_album_parameters?
     params[:title].nil? || params[:release_year].nil?
+  end
+
+  def invalid_artist_parameters?
+    params[:name].nil? || params[:genre].nil?
   end
 
   get '/albums/new' do
     erb(:new_album)
+  end
+
+  get '/artists/new' do
+    erb(:new_artist)
   end
 
   get '/artists' do
@@ -48,11 +56,15 @@ class Application < Sinatra::Base
   end
 
   post '/artists' do
-    repo = ArtistRepository.new
-    artist = Artist.new
-    artist.name = params[:name]
-    artist.genre = params[:genre]
-    repo.create(artist)
+    if invalid_artist_parameters?
+      status 400
+      return 'Please include both artist and genre.'
+    end
+    @artist = Artist.new
+    @artist.name = params[:name]
+    @artist.genre = params[:genre]
+    ArtistRepository.new.create(@artist)
+    erb(:artist_created)
   end
 
   get '/albums/:id' do
