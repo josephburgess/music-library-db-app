@@ -4,7 +4,7 @@
     <h1><%= @album.title %></h1>
     <p>
       Release year: <%= @album.release_year %>
-      Artist: <%= @artist.name %>
+      Artist: <a href = "/artists/<%=@artist.id%>"><%= @artist.name %></a>
     </p>
   </body>
 </html>
