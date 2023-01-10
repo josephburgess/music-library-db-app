@@ -29,6 +29,10 @@ class Application < Sinatra::Base
     repo.create(album)
   end
 
+  get '/albums/new' do
+    erb(:new_album)
+  end
+
   get '/artists' do
     repo = ArtistRepository.new
     @artists = repo.all

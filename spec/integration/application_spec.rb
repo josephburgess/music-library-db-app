@@ -31,15 +31,6 @@ describe Application do
     end
   end
 
-  # context 'GET to /artists' do
-  #   it 'returns the artist list' do
-  #     response = get('/artists')
-  #     expected_response = 'Pixies, ABBA, Taylor Swift, Nina Simone'
-  #     expect(response.status).to eq 200
-  #     expect(response.body).to eq expected_response
-  #   end
-  # end
-
   context 'POST to /artists' do
     it 'adds artists to the list' do
       response = post('/artists', name: 'Wild Nothing', genre: 'Indie')
@@ -47,6 +38,17 @@ describe Application do
       response = get('/artists')
       expect(response.status).to eq 200
       expect(response.body).to include 'Name: <a href = "/artists/5">Wild Nothing</a>'
+    end
+  end
+
+  context 'GET to /albums/new' do
+    it 'returns a form for adding new albums' do
+      response = get('/albums/new')
+      expect(response.status).to eq 200
+      expect(response.body).to include '<h1> Add an album: </h1>'
+      expect(response.body).to include '<form action="/albums" method="POST">'
+      expect(response.body).to include '<input type="text" id="title" name="title"><br>'
+      expect(response.body).to include '<input type="text" id="release_year" name="release_year"><br><br>'
     end
   end
 
