@@ -81,7 +81,12 @@ class Application < Sinatra::Base
 
   get '/artists/:id' do
     artistrepo = ArtistRepository.new
+    albumrepo = AlbumRepository.new
     @artist = artistrepo.find(params[:id])
+    @albums = []
+    albumrepo.all.each do |album|
+      @albums << album if album.artist_id == @artist.id
+    end
     erb(:artist)
   end
 end

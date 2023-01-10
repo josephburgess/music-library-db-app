@@ -3,7 +3,13 @@
   <body>
     <h1><%= @artist.name %></h1>
     <p>
-      Genre: <%= @artist.genre %>
+      Genre: <%= @artist.genre %> <br>
+      Albums: <br>
+      <% @albums.each do |album|%>
+        Title: <a href = "/albums/<%=album.id%>"><%= album.title %></a>
+        (released: <%= album.release_year %>)<br>
+      </div>
+    <% end %>
     </p>
   </body>
 </html>
